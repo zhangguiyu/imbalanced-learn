@@ -297,6 +297,13 @@
 
         <span class="c1"># Compute the ratio of majority samples next to minority samples</span>
         <span class="n">ratio_nn</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">ind_nn</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:]]</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">maj_c_</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">k</span>
+        <span class="c1"># Check that we found at least some neighbours belonging to the</span>
+        <span class="c1"># majority class</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ratio_nn</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;Not any neigbours belong to the majority&#39;</span>
+                               <span class="s1">&#39; class. This case will induce a NaN case with&#39;</span>
+                               <span class="s1">&#39; a division by zero. ADASYN is not suited for&#39;</span>
+                               <span class="s1">&#39; this specific dataset. Use SMOTE.&#39;</span><span class="p">)</span>
         <span class="c1"># Normalize the ratio</span>
         <span class="n">ratio_nn</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ratio_nn</span><span class="p">)</span>
 

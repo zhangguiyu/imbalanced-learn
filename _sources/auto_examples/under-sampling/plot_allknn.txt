@@ -22,11 +22,11 @@ An illustration of the AllKNN method.
  Out::
 
     ENN
-    Reduced 0.40\%
+    Reduced 0.16\%
     RENN
-    Reduced 0.60\%
+    Reduced 0.26\%
     AllKNN
-    Reduced 0.46\%
+    Reduced 0.20\%
 
 
 
@@ -122,7 +122,7 @@ An illustration of the AllKNN method.
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.994 seconds)
+**Total running time of the script:** ( 0 minutes  1.898 seconds)
 
 
 

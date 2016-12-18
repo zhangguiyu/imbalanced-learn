@@ -1,19 +1,19 @@
 
 
-.. _sphx_glr_auto_examples_under-sampling_plot_tomek_links.py:
+.. _sphx_glr_auto_examples_over-sampling_plot_smote.py:
 
 
-===========
-Tomek links
-===========
+=============
+SMOTE regular
+=============
 
-An illustration of the Tomek links method.
-
-
+An illustration of the random SMOTE regular method.
 
 
 
-.. image:: /auto_examples/under-sampling/images/sphx_glr_plot_tomek_links_001.png
+
+
+.. image:: /auto_examples/over-sampling/images/sphx_glr_plot_smote_001.png
     :align: center
 
 
@@ -23,21 +23,20 @@ An illustration of the Tomek links method.
 .. code-block:: python
 
 
-    print(__doc__)
-
     import matplotlib.pyplot as plt
     import seaborn as sns
     from sklearn.datasets import make_classification
     from sklearn.decomposition import PCA
 
-    from imblearn.under_sampling import TomekLinks
+    from imblearn.over_sampling import SMOTE
+
+    print(__doc__)
 
     sns.set()
 
     # Define some color for the plotting
     almost_black = '#262626'
     palette = sns.color_palette()
-
 
 
     # Generate the dataset
@@ -51,9 +50,9 @@ An illustration of the Tomek links method.
     # Fit and transform x to visualise inside a 2D feature space
     X_vis = pca.fit_transform(X)
 
-    # Apply Tomek Links cleaning
-    tl = TomekLinks()
-    X_resampled, y_resampled = tl.fit_sample(X, y)
+    # Apply regular SMOTE
+    sm = SMOTE(kind='regular')
+    X_resampled, y_resampled = sm.fit_sample(X, y)
     X_res_vis = pca.transform(X_resampled)
 
     # Two subplots, unpack the axes array immediately
@@ -71,11 +70,11 @@ An illustration of the Tomek links method.
     ax2.scatter(X_res_vis[y_resampled == 1, 0], X_res_vis[y_resampled == 1, 1],
                 label="Class #1", alpha=.5, edgecolor=almost_black,
                 facecolor=palette[2], linewidth=0.15)
-    ax2.set_title('Tomek links')
+    ax2.set_title('SMOTE regular')
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.903 seconds)
+**Total running time of the script:** ( 0 minutes  0.765 seconds)
 
 
 
@@ -84,13 +83,13 @@ An illustration of the Tomek links method.
 
   .. container:: sphx-glr-download
 
-     :download:`Download Python source code: plot_tomek_links.py <plot_tomek_links.py>`
+     :download:`Download Python source code: plot_smote.py <plot_smote.py>`
 
 
 
   .. container:: sphx-glr-download
 
-     :download:`Download Jupyter notebook: plot_tomek_links.ipynb <plot_tomek_links.ipynb>`
+     :download:`Download Jupyter notebook: plot_smote.ipynb <plot_smote.ipynb>`
 
 .. rst-class:: sphx-glr-signature
 

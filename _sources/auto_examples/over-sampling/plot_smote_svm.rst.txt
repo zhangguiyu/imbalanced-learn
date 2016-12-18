@@ -1,19 +1,19 @@
 
 
-.. _sphx_glr_auto_examples_under-sampling_plot_neighbourhood_cleaning_rule.py:
+.. _sphx_glr_auto_examples_over-sampling_plot_smote_svm.py:
 
 
-===========================
-Neighbourhood Cleaning Rule
-===========================
+=========
+SMOTE SVM
+=========
 
-An illustration of the neighbourhood cleaning rule method.
-
-
+An illustration of the random SMOTE SVM method.
 
 
 
-.. image:: /auto_examples/under-sampling/images/sphx_glr_plot_neighbourhood_cleaning_rule_001.png
+
+
+.. image:: /auto_examples/over-sampling/images/sphx_glr_plot_smote_svm_001.png
     :align: center
 
 
@@ -23,21 +23,20 @@ An illustration of the neighbourhood cleaning rule method.
 .. code-block:: python
 
 
-    print(__doc__)
-
     import matplotlib.pyplot as plt
     import seaborn as sns
     from sklearn.datasets import make_classification
     from sklearn.decomposition import PCA
 
-    from imblearn.under_sampling import NeighbourhoodCleaningRule
+    from imblearn.over_sampling import SMOTE
+
+    print(__doc__)
 
     sns.set()
 
     # Define some color for the plotting
     almost_black = '#262626'
     palette = sns.color_palette()
-
 
 
     # Generate the dataset
@@ -51,9 +50,9 @@ An illustration of the neighbourhood cleaning rule method.
     # Fit and transform x to visualise inside a 2D feature space
     X_vis = pca.fit_transform(X)
 
-    # Apply neighbourhood cleaning rule
-    ncl = NeighbourhoodCleaningRule()
-    X_resampled, y_resampled = ncl.fit_sample(X, y)
+    # Apply SMOTE SVM
+    sm = SMOTE(kind='svm')
+    X_resampled, y_resampled = sm.fit_sample(X, y)
     X_res_vis = pca.transform(X_resampled)
 
     # Two subplots, unpack the axes array immediately
@@ -71,11 +70,11 @@ An illustration of the neighbourhood cleaning rule method.
     ax2.scatter(X_res_vis[y_resampled == 1, 0], X_res_vis[y_resampled == 1, 1],
                 label="Class #1", alpha=.5, edgecolor=almost_black,
                 facecolor=palette[2], linewidth=0.15)
-    ax2.set_title('Neighbourhood cleaning rule')
+    ax2.set_title('SMOTE svm')
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  1.941 seconds)
+**Total running time of the script:** ( 0 minutes  0.960 seconds)
 
 
 
@@ -84,13 +83,13 @@ An illustration of the neighbourhood cleaning rule method.
 
   .. container:: sphx-glr-download
 
-     :download:`Download Python source code: plot_neighbourhood_cleaning_rule.py <plot_neighbourhood_cleaning_rule.py>`
+     :download:`Download Python source code: plot_smote_svm.py <plot_smote_svm.py>`
 
 
 
   .. container:: sphx-glr-download
 
-     :download:`Download Jupyter notebook: plot_neighbourhood_cleaning_rule.ipynb <plot_neighbourhood_cleaning_rule.ipynb>`
+     :download:`Download Jupyter notebook: plot_smote_svm.ipynb <plot_smote_svm.ipynb>`
 
 .. rst-class:: sphx-glr-signature
 

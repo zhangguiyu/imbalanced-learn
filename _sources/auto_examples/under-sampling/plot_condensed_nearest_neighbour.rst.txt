@@ -1,19 +1,19 @@
 
 
-.. _sphx_glr_auto_examples_over-sampling_plot_smote_bordeline_2.py:
+.. _sphx_glr_auto_examples_under-sampling_plot_condensed_nearest_neighbour.py:
 
 
-==================
-SMOTE borderline 2
-==================
+===========================
+Condensed nearest-neighbour
+===========================
 
-An illustration of the random SMOTE borderline 2 method.
-
-
+An illustration of the condensed nearest-neighbour method.
 
 
 
-.. image:: /auto_examples/over-sampling/images/sphx_glr_plot_smote_bordeline_2_001.png
+
+
+.. image:: /auto_examples/under-sampling/images/sphx_glr_plot_condensed_nearest_neighbour_001.png
     :align: center
 
 
@@ -23,21 +23,20 @@ An illustration of the random SMOTE borderline 2 method.
 .. code-block:: python
 
 
-    print(__doc__)
-
     import matplotlib.pyplot as plt
     import seaborn as sns
     from sklearn.datasets import make_classification
     from sklearn.decomposition import PCA
 
-    from imblearn.over_sampling import SMOTE
+    from imblearn.under_sampling import CondensedNearestNeighbour
+
+    print(__doc__)
 
     sns.set()
 
     # Define some color for the plotting
     almost_black = '#262626'
     palette = sns.color_palette()
-
 
 
     # Generate the dataset
@@ -51,9 +50,9 @@ An illustration of the random SMOTE borderline 2 method.
     # Fit and transform x to visualise inside a 2D feature space
     X_vis = pca.fit_transform(X)
 
-    # Apply Borderline SMOTE 2
-    sm = SMOTE(kind='borderline2')
-    X_resampled, y_resampled = sm.fit_sample(X, y)
+    # Apply Condensed Nearest Neighbours
+    cnn = CondensedNearestNeighbour()
+    X_resampled, y_resampled = cnn.fit_sample(X, y)
     X_res_vis = pca.transform(X_resampled)
 
     # Two subplots, unpack the axes array immediately
@@ -71,11 +70,11 @@ An illustration of the random SMOTE borderline 2 method.
     ax2.scatter(X_res_vis[y_resampled == 1, 0], X_res_vis[y_resampled == 1, 1],
                 label="Class #1", alpha=.5, edgecolor=almost_black,
                 facecolor=palette[2], linewidth=0.15)
-    ax2.set_title('SMOTE borderline 2')
+    ax2.set_title('Condensed nearest neighbour')
 
     plt.show()
 
-**Total running time of the script:** ( 0 minutes  0.732 seconds)
+**Total running time of the script:** ( 0 minutes  8.494 seconds)
 
 
 
@@ -84,13 +83,13 @@ An illustration of the random SMOTE borderline 2 method.
 
   .. container:: sphx-glr-download
 
-     :download:`Download Python source code: plot_smote_bordeline_2.py <plot_smote_bordeline_2.py>`
+     :download:`Download Python source code: plot_condensed_nearest_neighbour.py <plot_condensed_nearest_neighbour.py>`
 
 
 
   .. container:: sphx-glr-download
 
-     :download:`Download Jupyter notebook: plot_smote_bordeline_2.ipynb <plot_smote_bordeline_2.ipynb>`
+     :download:`Download Jupyter notebook: plot_condensed_nearest_neighbour.ipynb <plot_condensed_nearest_neighbour.ipynb>`
 
 .. rst-class:: sphx-glr-signature
 

@@ -18,10 +18,20 @@ class RandomOverSampler(BaseMulticlassSampler):
     Parameters
     ----------
     ratio : str or float, optional (default='auto')
-        If 'auto', the ratio will be defined automatically to balance
-        the dataset. Otherwise, the ratio is defined as the number
-        of samples in the minority class over the the number of samples
-        in the majority class.
+        If ratio is given, K new samples are generated:
+            K = ratio * C_i - C_j
+        where
+            C_i = number of samples in majority class i
+            C_j = number of samples in all other class j where j != i
+
+        If specifying ratio, ensure that 
+
+            ratio >= C_k / C_i
+        
+        where class k is the second largest class.
+
+        Setting ratio='auto' is equivalent to setting ratio = 1, i.e.,
+            K = C_i - C_j 
 
     random_state : int, RandomState instance or None, optional (default=None)
         If int, random_state is the seed used by the random number generator;
@@ -111,6 +121,10 @@ class RandomOverSampler(BaseMulticlassSampler):
             else:
                 num_samples = int((self.ratio * self.stats_c_[self.maj_c_]) -
                                   self.stats_c_[key])
+
+            # skip if existing samples >= ratio * Majority classs size
+            if num_samples < 0:
+                continue
 
             # Pick some elements at random
             random_state = check_random_state(self.random_state)

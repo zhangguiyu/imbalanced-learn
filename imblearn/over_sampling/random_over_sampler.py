@@ -18,7 +18,7 @@ class RandomOverSampler(BaseMulticlassSampler):
     Parameters
     ----------
     ratio : str or float, optional (default='auto')
-        If ratio is given, K new samples are generated:
+        If ratio is float, K new samples are generated:
             K = ratio * C_i - C_j
         where
             C_i = number of samples in majority class i
@@ -26,9 +26,9 @@ class RandomOverSampler(BaseMulticlassSampler):
 
         If specifying ratio, ensure that 
 
-            ratio >= C_k / C_i
+            C_k / C_i <= ratio <= 1.0
         
-        where class k is the second largest class.
+        where C_k is number of samples of the second largest class.
 
         Setting ratio='auto' is equivalent to setting ratio = 1, i.e.,
             K = C_i - C_j 
@@ -103,40 +103,74 @@ class RandomOverSampler(BaseMulticlassSampler):
 
         """
 
+        # Set to True to enable downsampling for classes that exceed 
+        # ratio * | C_max |
+        # setting to False will just leave those classes as is
+        downsample = False
+
+        # Define the number of sample to create
+        if self.ratio == 'auto':
+            ratio = 1.0
+        else:
+            ratio = self.ratio
+
         # Keep the samples from the majority class
-        X_resampled = X[y == self.maj_c_]
-        y_resampled = y[y == self.maj_c_]
+        if ratio==1: 
+            X_resampled = X[y == self.maj_c_]
+            y_resampled = y[y == self.maj_c_]
+        else:       # optionally downsampled
+            X_resampled = None
+            y_resampled = None
 
         # Loop over the other classes over picking at random
         for key in self.stats_c_.keys():
 
             # If this is the majority class, skip it
             if key == self.maj_c_:
-                continue
+                if ratio == 1:
+                    continue
 
-            # Define the number of sample to create
-            if self.ratio == 'auto':
-                num_samples = int(self.stats_c_[self.maj_c_] - self.stats_c_[
-                    key])
+            target_size = self.ratio * self.stats_c_[self.maj_c_]
+            num_samples = int( target_size - self.stats_c_[key] )
+
+            if (num_samples < 0):
+                if downsample:
+                    pick = int(target_size)
+                else:
+                    pick = 0
             else:
-                num_samples = int((self.ratio * self.stats_c_[self.maj_c_]) -
-                                  self.stats_c_[key])
-
-            # skip if existing samples >= ratio * Majority classs size
-            if num_samples < 0:
-                continue
+                pick = int(num_samples)
 
             # Pick some elements at random
+            high=self.stats_c_[key]
             random_state = check_random_state(self.random_state)
-            indx = random_state.randint(
-                low=0, high=self.stats_c_[key], size=num_samples)
+            indx = random_state.randint(low=0, high=high, size=pick)
 
-            # Concatenate to the majority class
-            X_resampled = np.concatenate(
-                (X_resampled, X[y == key], X[y == key][indx]), axis=0)
+            if X_resampled is None:
+                Xbase = []
+                ybase = []
+            else:
+                Xbase = [ X_resampled ]
+                ybase = [ y_resampled ]
 
-            y_resampled = np.concatenate(
-                (y_resampled, y[y == key], y[y == key][indx]), axis=0)
+            if num_samples < 0: # existing class size > ratio * |C_i|
+                if downsample:
+                    Xbase.append(X[y==key][indx])
+                    ybase.append(y[y==key][indx])
+                else:   # class size unchanged
+                    Xbase.append(X[y==key])
+                    ybase.append(y[y==key])
+            elif num_samples == 0:   # majority or equal sized class
+                Xbase.append(X[y==key]) 
+                ybase.append(y[y==key]) 
+            else:   # oversample
+                Xbase.append(X[y==key])
+                Xbase.append(X[y==key][indx])
+                ybase.append(y[y==key])
+                ybase.append(y[y==key][indx])
+
+            X_resampled = np.concatenate(Xbase, axis=0)
+            y_resampled = np.concatenate(ybase, axis=0)
 
         self.logger.info('Over-sampling performed: %s', Counter(y_resampled))
 
